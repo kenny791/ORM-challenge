@@ -8,6 +8,8 @@ from flask_sqlalchemy import SQLAlchemy
 
 from marshmallow.validate import Length
 
+from flask_bcrypt import Bcrypt
+
 # set the database URI via SQLAlchemy, 
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql+psycopg2://db_dev:123456@localhost:5432/trello_clone_db"
 # to avoid the deprecation warning
@@ -15,6 +17,9 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 #create the database object
 db = SQLAlchemy(app)
+
+#create the Bcrypt object
+bcrypt = Bcrypt(app)
 
 # create app's cli command named create, then run it in the terminal as "flask create", 
 # it will invoke create_db function
