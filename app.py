@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request, abort
 app = Flask(__name__)
 
 from flask_marshmallow import Marshmallow
@@ -9,6 +9,8 @@ from flask_sqlalchemy import SQLAlchemy
 from marshmallow.validate import Length
 
 from flask_bcrypt import Bcrypt
+
+
 
 # set the database URI via SQLAlchemy, 
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql+psycopg2://db_dev:123456@localhost:5432/trello_clone_db"
@@ -139,6 +141,18 @@ def get_cards():
 
 @app.route("/auth/register", methods=["POST"])
 def auth_register():
+        #The request data will be loaded in a user_schema converted to JSON. request needs to be imported from
+    user_fields = user_schema.load(request.json)
+    # find the user
+    user = User.query.filter_by(email=user_fields["email"]).first()
+
+    if user:
+        # return an abort message to inform the user. That will end the request
+        return abort(400, description="Email already registered")
+    # Create the user object
+    user = User()
+    
+    
     #The request data will be loaded in a user_schema converted to JSON. request needs to be imported from
     user_fields = user_schema.load(request.json)
     #Create the user object
