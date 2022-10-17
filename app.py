@@ -57,15 +57,15 @@ def seed_db():
 
 # seed users
     admin_user = User(
-        email = "admin",
-        password = "password123",
+        email = "admin@email.com",
+        password = bcrypt.generate_password_hash("password123").decode("utf-8"),
         admin = True
     )
     db.session.add(admin_user)
 
     user1 = User(
-        email = "user1",
-        password = "123456"
+        email = "user1@email.com",
+        password = bcrypt.generate_password_hash("123456").decode("utf-8")
     )
     db.session.add(user1)
     # commit the changes
