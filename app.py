@@ -88,6 +88,17 @@ card_schema = CardSchema()
 #multiple card schema, when many cards need to be retrieved
 cards_schema = CardSchema(many=True)
 
+
+class UserSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = User
+    #set the password's length to a minimum of 6 characters
+    password = ma.String(validate=Length(min=6))
+
+user_schema = UserSchema()
+users_schema = UserSchema(many=True)
+
+
 @app.route("/")
 def hello():
   return "Hello World!"
