@@ -66,6 +66,17 @@ class Card(db.Model):
     status = db.Column(db.String())
     priority = db.Column(db.String())
 
+class User(db.Model):
+    __tablename__ = "USERS"
+
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(), nullable=False, unique=True)
+    password = db.Column(db.String(), nullable=False)
+    admin = db.Column(db.Boolean(), default=False)
+
+
+
+
 #create the Card Schema with Marshmallow, it will provide the serialization needed for converting the data into JSON
 class CardSchema(ma.Schema):
     class Meta:
