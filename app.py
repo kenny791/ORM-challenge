@@ -48,9 +48,25 @@ def seed_db():
     )
     # Add the object as a new row to the table
     db.session.add(card2)
+
+
+# seed users
+    admin_user = User(
+        email = "admin",
+        password = "password123",
+        admin = True
+    )
+    db.session.add(admin_user)
+
+    user1 = User(
+        email = "user1",
+        password = "123456"
+    )
+    db.session.add(user1)
     # commit the changes
     db.session.commit()
     print("Table seeded") 
+
 
 @app.cli.command("drop")
 def drop_db():
