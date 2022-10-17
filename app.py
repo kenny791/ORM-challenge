@@ -5,6 +5,9 @@ from flask_marshmallow import Marshmallow
 ma = Marshmallow(app)
 
 from flask_sqlalchemy import SQLAlchemy 
+
+from marshmallow.validate import Length
+
 # set the database URI via SQLAlchemy, 
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql+psycopg2://db_dev:123456@localhost:5432/trello_clone_db"
 # to avoid the deprecation warning
