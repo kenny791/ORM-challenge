@@ -170,8 +170,12 @@ def auth_register():
     #Add it to the database and commit the changes
     db.session.add(user)
     db.session.commit()
-    #Return the user to check the request was successful
-    return jsonify(user_schema.dump(user))
+   #create a variable that sets an expiry date
+    expiry = timedelta(days=1)
+    #create the access token
+    access_token = create_access_token(identity=str(user.id), expires_delta=expiry)
+    # return the user email and the access token
+    return jsonify({"user":user.email, "token": access_token })
 
 
 #routes declaration area
