@@ -230,7 +230,9 @@ def card_delete(id):
     #Make sure it is in the database
     if not user:
         return abort(401, description="Invalid user")
-
+    # Stop the request if the user is not an admin
+    if not user.admin:
+        return abort(401, description="Unauthorised user")
     # find the card
     card = Card.query.filter_by(id=id).first()
     #return an error if the card doesn't exist
