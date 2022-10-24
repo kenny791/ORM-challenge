@@ -10,7 +10,7 @@ from marshmallow.validate import Length
 
 from flask_bcrypt import Bcrypt
 
-from flask_jwt_extended import JWTManager, create_access_token, jwt_required
+from flask_jwt_extended import JWTManager, create_access_token, jwt_required, get_jwt_identity
 jwt = JWTManager(app)
 
 from datetime import date, timedelta
@@ -216,3 +216,28 @@ def card_create():
     db.session.commit()
     #return the card in the response
     return jsonify(card_schema.dump(new_card))
+
+
+#add the id to let the server know the card we want to delete
+@app.route("/cards/<int:id>", methods=["DELETE"])
+@jwt_required()
+#Includes the id parameter
+def card_delete(id):
+    #get the user id invoking get_jwt_identity
+    user_id = get_jwt_identity()
+    #Find it in the db
+    user = User.query.get(user_id)
+    #Make sure it is in the database
+    if not user:
+        return abort(401, description="Invalid user")
+
+    # find the card
+    card = Card.query.filter_by(id=id).first()
+    #return an error if the card doesn't exist
+    if not Card:
+        return abort(400, description= "Card doesn't exist")
+    #Delete the card from the database and commit
+    db.session.delete(card)
+    db.session.commit()
+    #return the card in the response
+    return jsonify(card_schema.dump(card))
