@@ -10,12 +10,18 @@ from marshmallow.validate import Length
 
 from flask_bcrypt import Bcrypt
 
+from flask_jwt_extended import JWTManager, create_access_token
+jwt = JWTManager(app)
+
+from datetime import timedelta
 
 
 # set the database URI via SQLAlchemy, 
 app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql+psycopg2://db_dev:123456@localhost:5432/trello_clone_db"
 # to avoid the deprecation warning
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+# register JWT secret key
+app.config["JWT_SECRET_KEY"] = "Backend best end" 
 
 #create the database object
 db = SQLAlchemy(app)
@@ -179,4 +185,9 @@ def auth_login():
     if not user or not bcrypt.check_password_hash(user.password, user_fields["password"]):
         return abort(401, description="Incorrect username and password")
     
-    return "token"
+    #create a variable that sets an expiry date
+    expiry = timedelta(days=1)
+    #create the access token
+    access_token = create_access_token(identity=str(user.id), expires_delta=expiry)
+    # return the user email and the access token
+    return jsonify({"user":user.email, "token": access_token })
