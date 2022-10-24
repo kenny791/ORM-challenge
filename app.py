@@ -167,6 +167,8 @@ def auth_register():
     user.email = user_fields["email"]
     #Add the password attribute hashed by bcrypt
     user.password = bcrypt.generate_password_hash(user_fields["password"]).decode("utf-8")
+    #set the admin attribute to false
+    user.admin = False
     #Add it to the database and commit the changes
     db.session.add(user)
     db.session.commit()
